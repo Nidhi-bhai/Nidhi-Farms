@@ -14,7 +14,8 @@ import productHibiscusTea from './assets/product-hibiscus-tea.jpg'
 import productGingerSpiceTea from './assets/product-ginger-spice-tea.jpg'
 import productJaggery from './assets/product-jaggery.jpg'
 import productCocoaPowder from './assets/product-cocoa-powder.jpg'
-import heroFarm from './assets/hero-farm.jpg'
+import productKapiliWheat from './assets/product-kapili-wheat.jpg'
+import heroFarm from './assets/hero-premium.jpg'
 
 // Simple Button component
 const Button = ({ children, className = '', size = 'default', variant = 'default', ...props }) => {
@@ -224,15 +225,26 @@ function Hero() {
 }
 
 // Product card component
-function ProductCard({ image, name, description, price, scientificName }) {
+function ProductCard({ image, name, description, price, scientificName, has3DView, onView3D }) {
   return (
     <div className="bg-card rounded-2xl overflow-hidden soft-shadow transition-all hover:soft-shadow-hover hover:-translate-y-2 duration-300">
-      <div className="aspect-square overflow-hidden">
+      <div className="aspect-square overflow-hidden relative group">
         <img
           src={image}
           alt={name}
           className="w-full h-full object-cover transition-transform duration-300 hover:scale-110"
         />
+        {has3DView && (
+          <button
+            onClick={onView3D}
+            className="absolute inset-0 bg-black/60 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+          >
+            <div className="text-white text-center">
+              <Package className="w-12 h-12 mx-auto mb-2" />
+              <span className="text-lg font-semibold">View in 3D</span>
+            </div>
+          </button>
+        )}
       </div>
       <div className="p-6">
         <h3 className="text-xl font-semibold mb-2 text-foreground">{name}</h3>
@@ -256,6 +268,7 @@ function ProductCard({ image, name, description, price, scientificName }) {
 function Products() {
   const [products, setProducts] = useState([])
   const [loading, setLoading] = useState(true)
+  const [show3DModal, setShow3DModal] = useState(false)
 
   // Fallback products if Shopify is not configured
   const fallbackProducts = [
@@ -328,6 +341,14 @@ function Products() {
       scientificName: "Theobroma cacao",
       description: "Rich, pure cocoa powder from ethically sourced cacao beans",
       price: "₹350/200g"
+    },
+    {
+      image: productKapiliWheat,
+      name: "Kapili Wheat",
+      scientificName: "Triticum aestivum",
+      description: "Premium whole wheat grains, traditionally grown and naturally processed",
+      price: "₹200/kg",
+      has3DView: true
     }
   ]
 
@@ -385,15 +406,38 @@ function Products() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 mb-8">
           {products.slice(0, 8).map((product, index) => (
-            <ProductCard key={index} {...product} />
+            <ProductCard 
+              key={index} 
+              {...product} 
+              onView3D={product.has3DView ? () => setShow3DModal(true) : undefined}
+            />
           ))}
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
           {products.slice(8).map((product, index) => (
-            <ProductCard key={index} {...product} />
+            <ProductCard 
+              key={index} 
+              {...product}
+              onView3D={product.has3DView ? () => setShow3DModal(true) : undefined}
+            />
           ))}
         </div>
+
+        {/* 3D Modal */}
+        {show3DModal && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4" onClick={() => setShow3DModal(false)}>
+            <div className="relative w-full max-w-6xl h-[80vh] bg-background rounded-2xl overflow-hidden" onClick={(e) => e.stopPropagation()}>
+              <button
+                onClick={() => setShow3DModal(false)}
+                className="absolute top-4 right-4 z-10 bg-white/10 backdrop-blur-sm p-2 rounded-full hover:bg-white/20 transition-colors"
+              >
+                <X className="w-6 h-6 text-white" />
+              </button>
+              <Product3DViewer productUrl="https://pacdora.com/share/rBJZCYx7yrZXxqk8" />
+            </div>
+          </div>
+        )}
       </div>
     </section>
   )
@@ -612,7 +656,6 @@ function App() {
       <Navigation />
       <Hero />
       <Products />
-      <Product3DShowcase />
       <About />
       <Videos />
       <Contact />
