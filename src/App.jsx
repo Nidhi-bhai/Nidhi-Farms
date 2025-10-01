@@ -1,9 +1,10 @@
 import { useState, useEffect, useRef } from 'react'
 import { Button } from '@/components/ui/button.jsx'
 import { Leaf, ShoppingCart, Menu, X, Play, Package, Heart, Award, ChevronRight } from 'lucide-react'
+import { getProducts, isShopifyConfigured } from './lib/shopify'
 import './App.css'
 
-// Import product images
+// Import product images (fallback for when Shopify is not configured)
 import product1 from './assets/product1.jpg'
 import product2 from './assets/product2.jpg'
 import product3 from './assets/product3.jpg'
@@ -253,7 +254,11 @@ function ProductCard({ image, name, description, price, scientificName }) {
 
 // Products section
 function Products() {
-  const products = [
+  const [products, setProducts] = useState([])
+  const [loading, setLoading] = useState(true)
+
+  // Fallback products if Shopify is not configured
+  const fallbackProducts = [
     {
       image: product1,
       name: "Sarsaparilla Root",
@@ -290,6 +295,48 @@ function Products() {
       price: "₹800/kg"
     }
   ]
+
+  useEffect(() => {
+    async function fetchProducts() {
+      if (isShopifyConfigured()) {
+        try {
+          const shopifyProducts = await getProducts(10)
+          if (shopifyProducts && shopifyProducts.length > 0) {
+            setProducts(shopifyProducts.map(product => ({
+              image: product.image,
+              name: product.title,
+              description: product.description.substring(0, 100) + '...',
+              price: product.price + '/kg',
+              scientificName: '' // You can add this as a metafield in Shopify
+            })))
+          } else {
+            setProducts(fallbackProducts)
+          }
+        } catch (error) {
+          console.error('Error loading products:', error)
+          setProducts(fallbackProducts)
+        }
+      } else {
+        setProducts(fallbackProducts)
+      }
+      setLoading(false)
+    }
+
+    fetchProducts()
+  }, [])
+
+  if (loading) {
+    return (
+      <section id="products" className="py-20 bg-background">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl md:text-5xl mb-4 text-foreground">Our Bestsellers</h2>
+            <p className="text-lg text-muted-foreground">Loading products...</p>
+          </div>
+        </div>
+      </section>
+    )
+  }
 
   return (
     <section id="products" className="py-20 bg-background">
