@@ -5,11 +5,16 @@ import { getProducts, isShopifyConfigured } from './lib/shopify'
 import './App.css'
 
 // Import product images (fallback for when Shopify is not configured)
-import product1 from './assets/product1.jpg'
-import product2 from './assets/product2.jpg'
-import product3 from './assets/product3.jpg'
-import product4 from './assets/product4.jpg'
-import product5 from './assets/product5.jpg'
+import productCoconutOil from './assets/product-coconut-oil.jpg'
+import productFlaxseedOil from './assets/product-flaxseed-oil.jpg'
+import productMoringaPowder from './assets/product-moringa-powder.jpg'
+import productTurmericPowder from './assets/product-turmeric-powder.jpg'
+import productMilletsPowder from './assets/product-millets-powder.jpg'
+import productVetiverTea from './assets/product-vetiver-tea.jpg'
+import productHibiscusTea from './assets/product-hibiscus-tea.jpg'
+import productGingerSpiceTea from './assets/product-ginger-spice-tea.jpg'
+import productJaggery from './assets/product-jaggery.jpg'
+import productCocoaPowder from './assets/product-cocoa-powder.jpg'
 import heroFarm from './assets/hero-farm.jpg'
 
 // Lazy loading 3D component
@@ -260,39 +265,74 @@ function Products() {
   // Fallback products if Shopify is not configured
   const fallbackProducts = [
     {
-      image: product1,
-      name: "Sarsaparilla Root",
-      scientificName: "Smilax officinalis",
-      description: "Natural dried root for traditional wellness",
-      price: "₹1,200/kg"
+      image: productCoconutOil,
+      name: "Organic Coconut Oil",
+      scientificName: "Cocos nucifera",
+      description: "Premium cold-pressed golden coconut oil for cooking and wellness",
+      price: "₹450/500ml"
     },
     {
-      image: product2,
-      name: "Astragalus Root",
-      scientificName: "Astragalus membranaceus",
-      description: "Organic root powder for immune support",
-      price: "₹1,500/kg"
+      image: productFlaxseedOil,
+      name: "Flaxseed Oil",
+      scientificName: "Linum usitatissimum",
+      description: "Rich in Omega-3, cold-pressed flaxseed oil for heart health",
+      price: "₹380/250ml"
     },
     {
-      image: product3,
-      name: "Echinacea Root",
-      scientificName: "Echinacea purpurea",
-      description: "Dried root for natural health benefits",
-      price: "₹1,800/kg"
+      image: productMoringaPowder,
+      name: "Moringa Powder",
+      scientificName: "Moringa oleifera",
+      description: "Nutrient-rich superfood powder from organic moringa leaves",
+      price: "₹320/200g"
     },
     {
-      image: product4,
-      name: "Calendula Flowers",
-      scientificName: "Calendula officinalis",
-      description: "Organic dried flowers for herbal preparations",
-      price: "₹900/kg"
+      image: productTurmericPowder,
+      name: "Turmeric Powder",
+      scientificName: "Curcuma longa",
+      description: "Pure Ayurvedic turmeric powder with high curcumin content",
+      price: "₹180/250g"
     },
     {
-      image: product5,
-      name: "Hibiscus Powder",
+      image: productMilletsPowder,
+      name: "Millets Powder",
+      scientificName: "Mixed millets blend",
+      description: "Nutritious multi-millet flour blend for healthy cooking",
+      price: "₹150/500g"
+    },
+    {
+      image: productVetiverTea,
+      name: "Vetiver Tea",
+      scientificName: "Chrysopogon zizanioides",
+      description: "Calming Ayurvedic herbal tea with earthy vetiver roots",
+      price: "₹280/100g"
+    },
+    {
+      image: productHibiscusTea,
+      name: "Rosella Hibiscus Tea",
       scientificName: "Hibiscus sabdariffa",
-      description: "Pure hibiscus flower powder",
-      price: "₹800/kg"
+      description: "Vibrant ruby-red wellness tea rich in antioxidants",
+      price: "₹240/100g"
+    },
+    {
+      image: productGingerSpiceTea,
+      name: "Ginger with Spices Tea",
+      scientificName: "Zingiber officinale blend",
+      description: "Warming artisanal tea blend with ginger and aromatic spices",
+      price: "₹260/100g"
+    },
+    {
+      image: productJaggery,
+      name: "Organic Jaggery",
+      scientificName: "Saccharum officinarum",
+      description: "Traditional unrefined sweetener blocks from organic sugarcane",
+      price: "₹120/500g"
+    },
+    {
+      image: productCocoaPowder,
+      name: "Premium Cocoa Powder",
+      scientificName: "Theobroma cacao",
+      description: "Rich, pure cocoa powder from ethically sourced cacao beans",
+      price: "₹350/200g"
     }
   ]
 
@@ -348,14 +388,14 @@ function Products() {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
-          {products.slice(0, 3).map((product, index) => (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 mb-8">
+          {products.slice(0, 8).map((product, index) => (
             <ProductCard key={index} {...product} />
           ))}
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          {products.slice(3).map((product, index) => (
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+          {products.slice(8).map((product, index) => (
             <ProductCard key={index} {...product} />
           ))}
         </div>
